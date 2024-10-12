@@ -1,0 +1,12 @@
+
+<ng-container *ngIf="showComponent; else loading">
+    <crypto-chart [chartData]="chartData"></crypto-chart>
+</ng-container>
+
+<ng-template #loading>
+    <ng-container *ngIf="historyChange">
+        <div class="loader-container">
+            <div class="loader"></div>
+        </div>  
+    </ng-container>      
+</ng-template>
