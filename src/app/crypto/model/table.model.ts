@@ -11,5 +11,6 @@ export class TableOptions {
 
 export interface Column {
     colDef: string;
-    headerCellDef: string;
+    headerCellDef?: string;
+    inVisible?: boolean;
 }
