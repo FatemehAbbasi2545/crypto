@@ -26,13 +26,37 @@ export class CryptoCurrencyListComponent extends BaseComponent {
   tableOptions = new TableOptions({
     displayedColumns: ['name', 'priceUsd'],
     columns: [
-      { colDef: 'name', headerCellDef: 'Name'},
-      { colDef: 'priceUsd', headerCellDef: 'Price'}
+      { colDef: 'name', headerCellDef: 'Name' },
+      { colDef: 'priceUsd', headerCellDef: 'Price' },
+      { colDef: 'changeBackgroundColor', inVisible: true }
     ]
   });
 
   constructor(public cryptoCurrencyService: CryptoCurrencyService) {
     super();
+  }
+
+  ngOnInit(): void {
+    this.subscription.add(
+      this.cryptoCurrencyService.currencyPrices$.subscribe({
+        next: (data: any) => this.handleCurrencyPriceChange(data),
+        error: err => console.log(err)
+      })
+    );
+  }
+
+  handleCurrencyPriceChange(data: any){
+    console.log(data);
+    const keys = Object.keys(data);
+    for (const currency of this.cryptoCurrencyService.cryptoCurrencies) {
+      if (keys.includes(currency.id)) {
+        currency.priceUsd = data[currency.id];
+        (currency as any)['changeBackgroundColor'] = true;
+        setTimeout(() => {
+          (currency as any)['changeBackgroundColor'] = false;
+        }, 500);
+      }    
+    }
   }
 
   handleRowClick(id: string): void {
